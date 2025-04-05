@@ -1,8 +1,23 @@
+"use client";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import * as motion from "motion/react-client";
+import Input from "@/components/Input";
+import { useLogin } from "@/hooks/useLogin";
 
 function page() {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const login = useLogin();
+
+  function handleLogin() {
+    if (!email || !password) {
+      return;
+    }
+    login.mutate({ email, password });
+  }
+
   return (
     <div className="w-full h-screen flex justify-center items-center bg-gray-100 px-2">
       <motion.div
@@ -15,23 +30,28 @@ function page() {
       >
         <h1 className="text-2xl font-semibold">Login</h1>
         <div className="flex flex-col gap-5 w-full">
-          <input
+          <Input
             type="email"
             name="email"
             id="email"
             placeholder="Enter your email..."
-            className="text-black border border-[#cccccc] rounded-lg p-2.5 shadow-sm outline-none text-sm"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
-          <input
+          <Input
             type="password"
             name="password"
             id="password"
             placeholder="Enter your password..."
-            className="text-black border border-[#cccccc] rounded-lg p-3 shadow-sm outline-none text-sm"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </div>
         <div className="flex flex-col items-center gap-5 w-full">
-          <button className="py-1.5 px-15 rounded-lg bg-black text-white cursor-pointer">
+          <button
+            className="py-1.5 px-15 rounded-lg bg-black text-white cursor-pointer"
+            onClick={handleLogin}
+          >
             Login
           </button>
           <p className="text-sm">
