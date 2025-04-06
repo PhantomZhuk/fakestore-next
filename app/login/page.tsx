@@ -2,7 +2,7 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import * as motion from "motion/react-client";
-import Input from "@/components/Input";
+import Input from "@/components/auth/Input";
 import { useLogin } from "@/hooks/useLogin";
 
 function page() {

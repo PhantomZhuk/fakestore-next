@@ -27,7 +27,7 @@ export const useRegister = () => {
     },
     mutationKey: ["register"],
     onSuccess: (data) => {
-      router.push("/");
+      router.replace("/");
       console.log("Register successful", data);
     },
     onError: (error) => {

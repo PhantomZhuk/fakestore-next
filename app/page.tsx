@@ -1,7 +1,11 @@
+import Header from "@/components/home/Header";
+import Main from "@/components/home/Main";
+
 export default function Home() {
   return (
-    <div>
-      <h1>Home</h1>
+    <div className="w-full min-h-[100dvh] flex flex-col justify-between bg-gray-100">
+      <Header />
+      <Main />
     </div>
   );
 }

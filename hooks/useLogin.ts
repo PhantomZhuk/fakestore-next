@@ -21,7 +21,7 @@ export const useLogin = () => {
     },
     mutationKey: ["login"],
     onSuccess: (data) => {
-      router.push("/");
+      router.replace("/");
       console.log("Login successful", data);
     },
     onError: (error) => {
