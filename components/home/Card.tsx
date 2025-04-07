@@ -1,11 +1,18 @@
-import { Product } from "@/store/store";
-import { CrossIcon, SquareArrowOutUpRightIcon } from "lucide-react";
+"use client";
+import { Product, useStore } from "@/store/store";
+import { SquareArrowOutUpRightIcon } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 import Link from "next/link";
 import StarRating from "./Stars";
 
 function Card({ product }: { product: Product }) {
+  const addProduct = useStore((state) => state.addProduct);
+
+  const handleAddToCart = () => {
+    addProduct(product);
+  };
+
   return (
     <div
       key={product.id}
@@ -42,7 +49,10 @@ function Card({ product }: { product: Product }) {
             View
             <SquareArrowOutUpRightIcon size={14} />
           </Link>
-          <button className="px-5 py-2 bg-black text-white cursor-pointer text-sm flex items-center gap-2 rounded-lg">
+          <button
+            className="px-5 py-2 bg-black text-white cursor-pointer text-sm flex items-center gap-2 rounded-lg"
+            onClick={handleAddToCart}
+          >
             Add to Cart
           </button>
         </div>

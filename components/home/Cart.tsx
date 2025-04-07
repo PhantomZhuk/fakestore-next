@@ -1,22 +1,26 @@
 "use client";
 import { useMaxWidth } from "@/hooks/useMaxWidth";
-import { useStore } from "@/store/store";
+import { CartProduct, useStore } from "@/store/store";
 import { ShoppingCartIcon, X } from "lucide-react";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import CardCart from "./CardCart";
 
 function Cart() {
   const { isMobile, mounted } = useMaxWidth(768);
-  const getProductCount = useStore((state) => state.getProductCount());
+  const productCount = useStore((state) => state.getProductCount);
+  const products = useStore((state) => state.getProducts);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
     <div className="relative">
       <button className="cursor-pointer" onClick={() => setIsOpen(true)}>
         <ShoppingCartIcon />
-        <span className="w-5 h-5 rounded-2xl absolute mt-[-35px] ml-[15px] flex items-center justify-center text-white text-sm font-[Montserrat] bg-red-700">
-          {getProductCount}
-        </span>
+        {mounted && (
+          <span className="w-5 h-5 rounded-2xl absolute mt-[-35px] ml-[15px] flex items-center justify-center text-white text-sm font-[Montserrat] bg-red-700">
+            {productCount()}
+          </span>
+        )}
       </button>
       <motion.div
         initial={{ x: "100%" }}
@@ -33,9 +37,13 @@ function Cart() {
             onClick={() => setIsOpen(false)}
           />
         </div>
-        <div className="w-full h-[85dvh] flex flex-col gap-2 overflow-y-auto scrollbar-none"></div>
+        <div className="w-full h-[90dvh] flex flex-col items-center gap-2 overflow-y-auto scrollbar-none py-3">
+          {products().map((product: CartProduct) => (
+            <CardCart key={product.id * 100} product={product} />
+          ))}
+        </div>
         <div className="w-full flex justify-center items-center">
-          <button className="bg-black text-white font-[Montserrat] font-medium py-1.5 rounded-lg px-15 cursor-pointer">
+          <button className="bg-black text-white font-[Montserrat] font-medium py-1.5 rounded-lg px-[15px] cursor-pointer">
             Buy
           </button>
         </div>

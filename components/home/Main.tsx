@@ -31,7 +31,7 @@ function Main() {
   return (
     <div className="w-full min-h-[90dvh] flex flex-wrap items-center justify-center text-black gap-3 p-5">
       {products?.map((product: Product) => (
-        <Card product={product} key={product.id} />
+        <Card key={product.id} product={product} />
       ))}
     </div>
   );
