@@ -2,12 +2,18 @@
 import Header from "@/components/home/Header";
 import StarRating from "@/components/home/Stars";
 import { useGetProductById } from "@/hooks/useGetProductById";
+import { useStore } from "@/store/store";
 import Image from "next/image";
 import React, { use } from "react";
 
 function page({ params }: { params: Promise<{ id: number }> }) {
   const { id } = use(params);
   const { isLoading, error, data } = useGetProductById(id);
+  const addProduct = useStore((state) => state.addProduct);
+
+  const handleAddToCart = () => {
+    addProduct(data!);
+  };
 
   if (isLoading) {
     return (
@@ -46,7 +52,10 @@ function page({ params }: { params: Promise<{ id: number }> }) {
           <h2 className="text-lg">
             Price: <span className="text-green-500">{data!.price}$</span>
           </h2>
-          <button className="px-6 py-3 bg-black text-white cursor-pointer text-base flex items-center gap-2 rounded-lg">
+          <button
+            className="px-6 py-3 bg-black text-white cursor-pointer text-base flex items-center gap-2 rounded-lg"
+            onClick={handleAddToCart}
+          >
             Add to Cart
           </button>
         </div>

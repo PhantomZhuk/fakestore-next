@@ -1,4 +1,3 @@
-"use client";
 import { CartProduct, useStore } from "@/store/store";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
@@ -20,12 +19,10 @@ function CardCart({ product }: { product: CartProduct }) {
 
   const handleIncreaseAmountProduct = () => {
     addProduct(product);
-    console.log(product.quantity);
   };
 
   const handleReduceAmountProduct = () => {
     removeProduct(product.id);
-    console.log(product.quantity);
   };
 
   const handleDeleteProduct = () => {

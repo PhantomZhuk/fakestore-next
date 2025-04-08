@@ -2,14 +2,14 @@
 import { useMaxWidth } from "@/hooks/useMaxWidth";
 import { CartProduct, useStore } from "@/store/store";
 import { ShoppingCartIcon, X } from "lucide-react";
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
 import { motion } from "framer-motion";
 import CardCart from "./CardCart";
 
 function Cart() {
   const { isMobile, mounted } = useMaxWidth(768);
-  const productCount = useStore((state) => state.getProductCount);
-  const products = useStore((state) => state.getProducts);
+  const productCount = useStore((state) => state.getProductCount());
+  const products = useStore((state) => state.getProducts());
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
@@ -18,7 +18,7 @@ function Cart() {
         <ShoppingCartIcon />
         {mounted && (
           <span className="w-5 h-5 rounded-2xl absolute mt-[-35px] ml-[15px] flex items-center justify-center text-white text-sm font-[Montserrat] bg-red-700">
-            {productCount()}
+            {productCount}
           </span>
         )}
       </button>
@@ -38,12 +38,12 @@ function Cart() {
           />
         </div>
         <div className="w-full h-[90dvh] flex flex-col items-center gap-2 overflow-y-auto scrollbar-none py-3">
-          {products().map((product: CartProduct) => (
+          {products.map((product: CartProduct) => (
             <CardCart key={product.id * 100} product={product} />
           ))}
         </div>
         <div className="w-full flex justify-center items-center">
-          <button className="bg-black text-white font-[Montserrat] font-medium py-1.5 rounded-lg px-[15px] cursor-pointer">
+          <button className="bg-black text-white font-[Montserrat] font-medium py-1.5 px-3.5 rounded-lg cursor-pointer">
             Buy
           </button>
         </div>
