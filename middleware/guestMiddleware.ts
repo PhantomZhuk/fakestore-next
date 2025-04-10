@@ -1,15 +1,35 @@
+// middlewares/guestMiddleware.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import * as jose from "jose";
+import { cookies } from "next/headers";
 
-export function guestMiddleware(req: NextRequest) {
-  const token = req.cookies.get("token")?.value;
+const jwtConfig = {
+  secret: new TextEncoder().encode(process.env.JWT_SECRET_KEY as string),
+};
 
-  if (
-    token &&
-    (req.nextUrl.pathname === "/login" || req.nextUrl.pathname === "/register")
-  ) {
-    return NextResponse.redirect(new URL("/", req.url));
+export async function guestMiddleware(req: NextRequest) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+
+  if (!token) {
+    return NextResponse.next();
   }
 
-  return NextResponse.next();
+  try {
+    await jose.jwtVerify(token, jwtConfig.secret);
+
+    const isAuthPage = ["/login", "/register"].includes(req.nextUrl.pathname);
+    if (isAuthPage) {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
+
+    return NextResponse.next();
+  } catch (error) {
+    console.error("guestMiddleware jwtVerify error: ", error);
+
+    const response = NextResponse.redirect(new URL("/login", req.url));
+    response.cookies.set("token", "", { maxAge: 0 }); // правильне видалення токена
+    return response;
+  }
 }

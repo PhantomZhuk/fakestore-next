@@ -1,5 +1,5 @@
 import { CartProduct } from "@/store/store";
-import mongoose, { Schema, Document, model } from "mongoose";
+import mongoose, { Schema, Document, model, models } from "mongoose";
 
 interface IOrder extends Document {
   fullName: string;
@@ -21,7 +21,7 @@ const ProductSchema = new Schema<CartProduct>(
     },
     quantity: { type: Number, required: true },
   },
-  { _id: false }
+  { _id: false, validateBeforeSave: false }
 );
 
 const OrderSchema = new Schema<IOrder>({
@@ -30,4 +30,4 @@ const OrderSchema = new Schema<IOrder>({
   products: { type: [ProductSchema], required: true },
 });
 
-export const Order = model<IOrder>("Order", OrderSchema);
+export const Order = models.Order || model<IOrder>("Order", OrderSchema);

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { createOrder, getOrders } from "@/services/orderService";
+import { cookies } from "next/headers";
 
 export async function GET(req: NextRequest) {
   try {
@@ -30,8 +31,10 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     await connectDB();
-    const { fullName, email, products } = await req.json();
-    const { message } = await createOrder(fullName, email, products);
+    const cookieStore = await cookies();
+    const token = cookieStore.get("token")?.value;
+    const products = await req.json();
+    const { message } = await createOrder(token!, products);
     return NextResponse.json({ success: true, message });
   } catch (error: unknown) {
     if (error instanceof Error) {

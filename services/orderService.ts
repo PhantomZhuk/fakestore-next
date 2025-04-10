@@ -1,19 +1,23 @@
 import { Order } from "@/models/Order";
+import { User } from "@/models/User";
 import { CartProduct } from "@/store/store";
+import jwt from "jsonwebtoken";
 
-export const createOrder = async (
-  fullName: string,
-  email: string,
-  products: CartProduct[]
-) => {
-  if (!fullName || !email || !products) throw Error("Missing required fields");
-  if (products.length === 0) throw Error("No products in the order");
+const JWT_SECRET = process.env.JWT_SECRET as string;
 
-  const order = await Order.create({
-    fullName,
-    email,
+export const createOrder = async (token: string, products: CartProduct[]) => {
+  const userId = jwt.verify(token, JWT_SECRET);
+  if (!userId) throw Error("Invalid token");
+  if (typeof userId === "string") throw Error("Invalid token format");
+  const user = await User.findById(userId.userId);
+
+  const order = new Order({
+    fullName: user.fullName,
+    email: user.email,
     products,
   });
+
+  await order.save({ runValidators: false });
 
   if (!order) throw Error("Failed to create order");
 

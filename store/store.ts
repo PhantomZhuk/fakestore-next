@@ -3,7 +3,6 @@ import {
   removeLocalStorage,
   setLocalStorage,
 } from "@/utils/localStorageUtils";
-import { p } from "framer-motion/client";
 import { create } from "zustand";
 
 export interface Product {
@@ -67,10 +66,14 @@ export const useStore = create<StoreState>((set, get) => ({
     set((state) => {
       const updatedProduct = state.product
         .map((product) => {
-          if (product.id === id && product.quantity > 1) {
-            return { ...product, quantity: product.quantity - 1 };
+          if (product.id === id) {
+            if (product.quantity > 1) {
+              return { ...product, quantity: product.quantity - 1 };
+            } else {
+              return null;
+            }
           }
-          return product.quantity === 1 ? null : product;
+          return product;
         })
         .filter((product) => product !== null) as CartProduct[];
 

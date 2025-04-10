@@ -2,7 +2,7 @@
 import { useMaxWidth } from "@/hooks/useMaxWidth";
 import { CartProduct, useStore } from "@/store/store";
 import { ShoppingCartIcon, X } from "lucide-react";
-import React, { useReducer, useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import CardCart from "./CardCart";
 
